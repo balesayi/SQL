@@ -1,5 +1,4 @@
-# SQL
-SQL Portfolio
+# Basam Alesayi's SQL Portfolio
 
-Welcome to my SQL portfolio! 
-<br>This code repository contains examples of SQL I've written. Feel free to take a look and reach out if you have any questions.
+## Welcome to my SQL portfolio! 
+<br>This code repository contains examples of SQL I've written. Feel free to take a look and reach out if you have any questions: info@askinertia.com
