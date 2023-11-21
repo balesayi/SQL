@@ -29,7 +29,6 @@ VALUES
 
 
 # Evualuate all items at superstore and how they compare to the min, max, and average price.
-
 SELECT
       item_id 
     , item_name 
@@ -47,10 +46,10 @@ SELECT
 FROM superstore
 GROUP BY item_id, item_name, category, price, stock_quantity, average_rating 
 ORDER BY price DESC
+;
 
 
 # Evaluate all Kitchen Supplies items at superstore and how they compare to the min, max, and average price within the Kitchen Supplies category.
-
 SELECT
       item_id 
     , item_name 
@@ -70,10 +69,10 @@ FROM superstore
 WHERE category = 'Kitchen Supplies'
 GROUP BY item_id, item_name, category, price, stock_quantity, average_rating 
 ORDER BY price DESC
+;
 
 
 # How many air purifiers are in stock?
-
 SELECT
       item_id
     , item_name
@@ -81,3 +80,4 @@ SELECT
     , price
 FROM superstore
 WHERE item_name = "Air Purifier"
+;
