@@ -37,21 +37,13 @@ SELECT
     , stock_quantity 
     , average_rating
     , price 
-                      , (SELECT 
-                           min(price) 
-                         FROM superstore) as min_price
+                      , (SELECT min(price) FROM superstore) as min_price
                          
-                      , (SELECT 
-                           max(price) 
-                         FROM superstore) as max_price
+                      , (SELECT max(price) FROM superstore) as max_price
                          
-                      , ROUND((SELECT 
-                                 avg(price) 
-                               FROM superstore), 2) as avg_price
+                      , ROUND((SELECT avg(price) FROM superstore), 2) as avg_price
                                
-                      , (SELECT 
-                           count(price) 
-                         FROM superstore) as price_cnt
+                      , (SELECT count(price) FROM superstore) as price_cnt
 FROM superstore
 GROUP BY item_id, item_name, category, price, stock_quantity, average_rating 
 ORDER BY price DESC
@@ -66,25 +58,13 @@ SELECT
     , stock_quantity 
     , average_rating
     , price 
-                      , (SELECT 
-                           min(price) 
-                         FROM superstore 
-                         WHERE category = 'Kitchen Supplies') as min_price
+                      , (SELECT min(price) FROM superstore WHERE category = 'Kitchen Supplies') as min_price
                          
-                      , (SELECT 
-                           max(price) 
-                         FROM superstore 
-                         WHERE category = 'Kitchen Supplies') as max_price
+                      , (SELECT max(price) FROM superstore WHERE category = 'Kitchen Supplies') as max_price
                          
-                      , ROUND((SELECT 
-                                 avg(price) 
-                               FROM superstore 
-                               WHERE category = 'Kitchen Supplies'), 2) as avg_price
+                      , ROUND((SELECT avg(price) FROM superstore WHERE category = 'Kitchen Supplies'), 2) as avg_price
                                
-                      , (SELECT 
-                           count(price) 
-                         FROM superstore 
-                         WHERE category = 'Kitchen Supplies') as price_cnt
+                      , (SELECT count(price) FROM superstore WHERE category = 'Kitchen Supplies') as price_cnt
                          
 FROM superstore
 WHERE category = 'Kitchen Supplies'
