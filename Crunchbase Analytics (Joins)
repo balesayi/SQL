@@ -1,4 +1,4 @@
-# 
+# This analysis used sample crunchbase datasets found on the Mode platform. SQL skills demonstrated focus on Joins.
 
 
 -- Write a query that shows a company's name, "status" (found in the crunchbase_companies table), and the number of unique investors in that company from the investments table. 
