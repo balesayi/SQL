@@ -1,0 +1,103 @@
+# 
+
+
+-- Write a query that shows a company's name, "status" (found in the crunchbase_companies table), and the number of unique investors in that company from the investments table. 
+-- Limit to only companies in the state of New York. Sort the number of investors from most to fewest. 
+
+SELECT 
+        companies.name AS company_name
+      , companies.status
+      , COUNT(DISTINCT investments.investor_name) AS num_investors
+
+FROM tutorial.crunchbase_companies companies
+
+LEFT JOIN tutorial.crunchbase_investments investments
+  ON companies.permalink = investments.company_permalink
+
+WHERE companies.state_code = 'NY'
+GROUP BY 1,2
+ORDER BY 3 DESC
+
+
+
+-- How many companies have no investors compared to those that do have investors?
+
+SELECT 
+        CASE 
+            WHEN investments.investor_name IS NULL THEN 'No Investors'
+            ELSE 'Has Investors' END AS investor
+      , COUNT(DISTINCT companies.permalink) AS num_companies
+
+FROM tutorial.crunchbase_companies companies
+
+LEFT JOIN tutorial.crunchbase_investments investments
+  ON companies.permalink = investments.company_permalink
+
+GROUP BY 1
+ORDER BY 2 DESC
+
+
+
+-- What is the percentage of companies being acquired vs not being acquired with investors and without investors?
+
+SELECT 
+        CASE 
+            WHEN inv.investor_name IS NULL THEN 'No Investors'
+            ELSE 'Has Investors' END AS investor
+            
+      , CASE 
+            WHEN acq.acquirer_name IS NULL THEN 'No Acquirers'
+            ELSE 'Has Acquirer' END AS acquirer
+            
+      , COUNT(DISTINCT comp.permalink) AS num_companies
+      
+FROM tutorial.crunchbase_companies comp
+
+LEFT JOIN tutorial.crunchbase_investments inv
+  ON comp.permalink = inv.company_permalink
+ 
+LEFT JOIN tutorial.crunchbase_acquisitions acq
+  ON comp.permalink = acq.company_permalink
+
+GROUP BY 1,2
+ORDER BY 3 DESC
+
+
+
+-- Of all the company being invested in, write a query that compares the average amount of investment raised by companies in 'San Francisco' city to companies in 'NY' city and by status.
+
+SELECT
+        comp.city AS city
+      , comp.status AS status
+      , COUNT(DISTINCT comp.permalink) AS num_companies
+      , AVG(inv.raised_amount_usd) AS avg_investment_amount
+      , SUM(inv.raised_amount_usd) AS total_investment_amount
+      
+FROM tutorial.crunchbase_companies comp
+
+JOIN tutorial.crunchbase_investments inv
+  ON comp.permalink = inv.company_permalink
+
+WHERE comp.city IN ('San Francisco', 'NY')
+GROUP BY 1,2
+ORDER BY 4 DESC
+
+
+
+-- Of all the company being invested in, write a query that show the average amount of investment raised by companies in the US by status every year.
+
+SELECT
+        inv.funded_year AS year
+      , comp.status AS status
+      , COUNT(DISTINCT comp.permalink) AS num_companies
+      , AVG(inv.raised_amount_usd) AS avg_investment_amount
+      , SUM(inv.raised_amount_usd) AS total_investment_amount
+
+FROM tutorial.crunchbase_companies comp
+
+JOIN tutorial.crunchbase_investments inv
+  ON comp.permalink = inv.company_permalink
+  
+WHERE comp.country_code = 'USA'
+GROUP BY 1,2
+ORDER BY 1
