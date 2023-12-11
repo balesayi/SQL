@@ -1,1 +1,115 @@
+-- Write a query that shows the number of companies being invested in, number of acquiring companies in the US, their average and total investment, and acquisition amount by year. 
+
+WITH investments AS (
+  SELECT
+          funded_year
+        , COUNT(DISTINCT company_permalink) AS num_companies
+        , AVG(raised_amount_usd) AS avg_investment_amount
+        , SUM(raised_amount_usd) AS total_investment_amount
+ 
+  FROM tutorial.crunchbase_investments
+  WHERE company_country_code = 'USA'
+  GROUP BY 1
+),acquisitions AS (
+  SELECT
+          acquired_year
+        , COUNT(DISTINCT company_permalink) AS num_companies
+        , AVG(price_amount) as avg_acq_amount
+        , SUM(price_amount) AS total_acq_amount
+  
+  FROM tutorial.crunchbase_acquisitions
+  WHERE company_country_code = 'USA'
+  GROUP BY 1
+)
+
+SELECT
+        inv.funded_year
+      , inv.num_companies AS num_invest_companies
+      , acq.num_companies AS num_acquire_companies
+      , inv.avg_investment_amount
+      , inv.total_investment_amount
+      , acq.avg_acq_amount
+      , acq.total_acq_amount
+
+FROM investments inv
+LEFT JOIN acquisitions acq
+ON inv.funded_year = acq.acquired_year
+ORDER BY 1
+
+
+
+-- Write a query that shows the number of investors and acquirers in regions: 'SF Bay', and 'New York', their total investment, and acquisition amount by year, region and category_code.
+
+WITH investments AS (
+  SELECT
+          funded_year AS year
+        , investor_region AS region
+        , investor_category_code AS category_code
+        , COUNT(DISTINCT investor_permalink) AS num_investors
+        , SUM(raised_amount_usd) AS total_investment_amount
+  
+  FROM tutorial.crunchbase_investments
+  WHERE investor_region IN ('SF Bay', 'New York')
+  GROUP BY 1,2,3
+),acquisitions AS (
+  SELECT
+          acquired_year AS year
+        , acquirer_region AS region
+        , acquirer_category_code AS category_code
+        , COUNT(DISTINCT acquirer_permalink) AS num_acquirers
+        , SUM(price_amount) AS total_acq_amount
+ 
+  FROM tutorial.crunchbase_acquisitions
+  WHERE acquirer_region IN ('SF Bay', 'New York')
+  GROUP BY 1,2,3
+)
+ 
+SELECT
+        inv.year
+      , inv.region AS region
+      , inv.category_code AS category_code
+      , inv.num_investors AS num_investors
+      , acq.num_acquirers AS num_acquirers
+      , inv.total_investment_amount
+      , acq.total_acq_amount
+
+FROM investments inv
+
+LEFT JOIN acquisitions acq
+  ON inv.year = acq.year
+
+WHERE 1=1 
+          AND inv.region = acq.region
+          AND inv.category_code = acq.category_code
+ORDER BY 1
+
+
+
+-- Write a query to compute the cumulative sum of investment amount that Google has spent over the years.
+
+WITH investments AS (
+  SELECT
+          funded_year AS year
+        , investor_name
+        , COUNT(DISTINCT company_permalink) AS num_companies
+        , SUM(raised_amount_usd) AS total_investment_amount
+  
+  FROM tutorial.crunchbase_investments
+  WHERE investor_name = 'Google'
+  GROUP BY 1,2
+  ORDER BY 1
+)
+
+SELECT
+        inv1.funded_year 
+      , inv1.investor_name
+      , SUM(inv2.num_companies) AS cummulative_invested_companies
+      , SUM(inv2.total_investment_amount) AS cummulative_investment_amount
+
+FROM investments inv1
+JOIN investments inv2
+  ON inv1.year >= inv2.year
+  AND inv1.investor_name = inv2.investor_name
+GROUP BY 1,2
+ORDER BY 1,2
 
