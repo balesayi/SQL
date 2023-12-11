@@ -1,4 +1,4 @@
-# This analysis used sample crunchbase datasets found on the Mode platform
+# This analysis used sample crunchbase datasets found on the Mode platform. SQL skills demonstrated focus on aggregations.
 
 
 -- How many records are in the crunchbase companies table?
