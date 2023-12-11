@@ -1,0 +1,155 @@
+
+
+
+-- How many records are in the crunchbase companies table?
+
+SELECT count(*)
+FROM tutorial.crunchbase_companies
+
+SELECT *
+FROM tutorial.crunchbase_companies
+LIMIT 10
+
+
+
+-- What is the minimum, maximum, total, and average funding total amount in USD? 
+
+SELECT 
+        MIN(funding_total_usd) as min_funding
+      , MAX(funding_total_usd) as max_funding
+      , SUM(funding_total_usd) as total_funding
+      , AVG(funding_total_usd) as avg_funding
+
+FROM tutorial.crunchbase_companies 
+
+
+
+-- Which company has the highest funding amount?
+
+SELECT *
+FROM tutorial.crunchbase_companies 
+WHERE funding_total_usd = (
+                            SELECT max(funding_total_usd) 
+                            FROM tutorial.crunchbase_companies 
+                          );
+
+
+
+-- What's the number of companies and total funding per category code? Which category has the highest total funding amount?
+
+SELECT 
+        category_code 
+      , COUNT(*) AS number_of_companies
+      , SUM(funding_total_usd) as total_funding
+
+FROM tutorial.crunchbase_companies 
+GROUP BY category_code
+ORDER BY total_funding DESC;
+
+
+
+-- What is the average funding amount for each category code? 
+
+SELECT 
+        category_code 
+      , COUNT(*) AS number_of_companies
+      , SUM(funding_total_usd) as total_funding
+      , SUM(funding_total_usd) / COUNT(*) as avg_funding_per_category
+
+FROM tutorial.crunchbase_companies 
+GROUP BY category_code
+ORDER BY avg_funding_per_category DESC;
+
+
+
+-- Show the different number of companies by status between 2 states "CA" and "NY"
+
+SELECT 
+        status
+      , state_code 
+      , COUNT(*) as company_count
+      
+FROM tutorial.crunchbase_companies 
+WHERE state_code IN ('CA', 'NY')
+GROUP BY status, state_code 
+
+
+
+-- Show all the different price_currency_code in the tutorial.crunchbase_acquisitions dataset and how many records exist for each.
+
+SELECT 
+        DISTINCT price_currency_code
+      , COUNT(*) AS count_price_currency_codes
+
+FROM tutorial.crunchbase_acquisitions 
+GROUP BY 1
+ORDER BY 2 DESC;
+
+
+
+-- What is the minimum, maximum, total, and average funding total amount in USD? 
+
+SELECT 
+        MIN(price_amount) as min_funding
+      , MAX(price_amount) as max_funding
+      , SUM(price_amount) as total_funding
+      , AVG(price_amount) as avg_funding
+
+FROM tutorial.crunchbase_acquisitions  
+WHERE price_currency_code = 'USD'
+
+
+
+-- Which company has the lowest funding amount?
+
+SELECT *
+FROM tutorial.crunchbase_acquisitions 
+WHERE price_amount = (
+                      SELECT min(price_amount) 
+                      FROM tutorial.crunchbase_acquisitions 
+                      WHERE price_currency_code = 'USD'
+                      );
+
+
+
+--  For each acquirer, find the number of companies they acquire and the total amount they spend.
+
+SELECT 
+        acquirer_name
+      , COUNT(DISTINCT company_permalink) as company_count
+      , SUM(price_amount) as amount_spent
+      
+FROM tutorial.crunchbase_acquisitions 
+WHERE price_currency_code = 'USD'
+GROUP BY acquirer_name
+ORDER BY 2 DESC;
+
+
+
+-- What is the number of acquired companies and total acquiring amount each year?
+
+SELECT 
+        acquired_year
+      , COUNT(DISTINCT company_permalink) as company_count
+      , SUM(price_amount) as acquiring_amount
+      
+FROM tutorial.crunchbase_acquisitions 
+WHERE 1=1 
+          AND price_currency_code = 'USD'
+GROUP BY acquired_year
+
+
+
+-- What is the number of acquired companies by category code each year?
+
+SELECT 
+        acquired_year
+      , company_category_code
+      , COUNT(DISTINCT company_permalink) as company_count
+
+FROM tutorial.crunchbase_acquisitions 
+WHERE 1=1 
+          AND price_currency_code = 'USD'
+          AND company_category_code IS NOT NULL
+          AND price_amount IS NOT NULL 
+GROUP BY acquired_year, company_category_code
