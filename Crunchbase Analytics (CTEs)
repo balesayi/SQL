@@ -106,8 +106,8 @@ WITH investments AS (
 SELECT
         inv1.funded_year 
       , inv1.investor_name
-      , SUM(inv2.num_companies) AS cummulative_invested_companies
-      , SUM(inv2.total_investment_amount) AS cummulative_investment_amount
+      , SUM(inv2.num_companies) AS cumulative_invested_companies
+      , SUM(inv2.total_investment_amount) AS cumulative_investment_amount
 
 FROM investments inv1
 JOIN investments inv2
