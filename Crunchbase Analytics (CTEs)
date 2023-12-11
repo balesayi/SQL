@@ -1,3 +1,6 @@
+# This analysis used sample crunchbase datasets found on the Mode platform. SQL skills demonstrated focus on CTEs.
+
+
 -- Write a query that shows the number of companies being invested in, number of acquiring companies in the US, their average and total investment, and acquisition amount by year. 
 
 WITH investments AS (
