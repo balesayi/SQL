@@ -1,4 +1,5 @@
-# This data set included 11 tables relating to Chinook music sales and below are my solutions to some questions
+# This dataset is called chinook, which represents a digital media store and includes tables for artists, albums, media tracks, invoices, and customers. There were 11 tables in total in the dataset.
+
 
 -- Show Customers (their full names, customer ID, and country) who are not in the US. 
 
