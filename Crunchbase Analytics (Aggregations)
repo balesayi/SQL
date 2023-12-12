@@ -1,5 +1,6 @@
 # This analysis used sample crunchbase datasets found on the Mode platform. SQL skills demonstrated focus on aggregations.
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- How many records are in the crunchbase companies table?
 
@@ -10,7 +11,7 @@ SELECT *
 FROM tutorial.crunchbase_companies
 LIMIT 10
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- What is the minimum, maximum, total, and average funding total amount in USD? 
 
@@ -22,7 +23,7 @@ SELECT
 
 FROM tutorial.crunchbase_companies 
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Which company has the highest funding amount?
 
@@ -33,7 +34,7 @@ WHERE funding_total_usd = (
                             FROM tutorial.crunchbase_companies 
                           );
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- What's the number of companies and total funding per category code? Which category has the highest total funding amount?
 
@@ -46,7 +47,7 @@ FROM tutorial.crunchbase_companies
 GROUP BY category_code
 ORDER BY total_funding DESC;
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- What is the average funding amount for each category code? 
 
@@ -60,7 +61,7 @@ FROM tutorial.crunchbase_companies
 GROUP BY category_code
 ORDER BY avg_funding_per_category DESC;
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Show the different number of companies by status between 2 states "CA" and "NY"
 
@@ -73,7 +74,7 @@ FROM tutorial.crunchbase_companies
 WHERE state_code IN ('CA', 'NY')
 GROUP BY status, state_code 
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Show all the different price_currency_code in the tutorial.crunchbase_acquisitions dataset and how many records exist for each.
 
@@ -85,7 +86,7 @@ FROM tutorial.crunchbase_acquisitions
 GROUP BY 1
 ORDER BY 2 DESC;
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- What is the minimum, maximum, total, and average funding total amount in USD? 
 
@@ -98,7 +99,7 @@ SELECT
 FROM tutorial.crunchbase_acquisitions  
 WHERE price_currency_code = 'USD'
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Which company has the lowest funding amount?
 
@@ -110,7 +111,7 @@ WHERE price_amount = (
                       WHERE price_currency_code = 'USD'
                       );
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 --  For each acquirer, find the number of companies they acquire and the total amount they spend.
 
@@ -124,7 +125,7 @@ WHERE price_currency_code = 'USD'
 GROUP BY acquirer_name
 ORDER BY 2 DESC;
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- What is the number of acquired companies and total acquiring amount each year?
 
@@ -138,7 +139,7 @@ WHERE 1=1
           AND price_currency_code = 'USD'
 GROUP BY acquired_year
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- What is the number of acquired companies by category code each year?
 
