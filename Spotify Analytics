@@ -28,6 +28,8 @@ time_signature integer NOT NULL
 
 #Next, I explored the data using the following SQL. 
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 -- Who are the top 10 artists with the most danceable songs on average? 
 
 SELECT
@@ -39,6 +41,7 @@ GROUP BY artist_name
 ORDER BY avg_danceability DESC
 LIMIT 10
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Who are the top 10 artists based on popularity?
 
@@ -51,6 +54,7 @@ GROUP BY artist_name
 ORDER BY avg_popularity DESC
 LIMIT 10
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- What artist released the longest song?
 
@@ -58,12 +62,14 @@ SELECT artist_name
 FROM BIT_DB.Spotifydata
 WHERE duration_ms = (SELECT max(duration_ms) FROM BIT_DB.Spotifydata)
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- What's the average danceability for the 10 most popular songs?
 
 SELECT avg(danceability)
 FROM (SELECT * FROM Spotifydata ORDER BY popularity DESC LIMIT 10) as top_songs; 
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Calculate the average popularity for the artists in the Spotify data table. 
 -- Then, for every artist with an average popularity of 90 or above, show their name, their average popularity, and label them as a “Top Star”.
