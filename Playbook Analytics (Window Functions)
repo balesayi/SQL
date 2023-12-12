@@ -1,0 +1,150 @@
+# x
+
+
+-- Calculate a running total (cumulative sum) of active users by date and get the number of users, and running total of users by date. 
+
+SELECT 
+        DATE(occurred_at) as date
+      , COUNT(DISTINCT user_id) as num_users 
+      , SUM(COUNT(DISTINCT user_id)) OVER (ORDER BY DATE(occurred_at)) as running_total
+
+FROM tutorial.playbook_events
+GROUP BY DATE(occurred_at)
+
+
+
+-- Calculate Month-Over-Month Active User Growth Rate.
+
+WITH users AS (
+  SELECT
+          DATE_TRUNC('month', occurred_at) AS month
+        , COUNT(DISTINCT user_id) AS num_users
+  
+  FROM tutorial.playbook_events
+  GROUP BY 1
+)
+
+SELECT
+        month
+      , num_users
+      -- growth rate = num_users this month - num_users previous month
+      , (100 * ((num_users - LAG(num_users) OVER (ORDER BY month))) / LAG(num_users) OVER (ORDER BY month)) as growth
+      , (100 * ((num_users - LAG(num_users) OVER (ORDER BY month))) / LAG(num_users) OVER (ORDER BY month)) || '%' as growth_pct
+
+FROM users
+ORDER BY 1
+
+
+
+-- Calculate a 30-day moving average of active users by date.
+
+SELECT
+        DATE(occurred_at) AS date
+      , COUNT(DISTINCT user_id) AS num_users
+      -- 30-day moving average
+      , AVG(COUNT(DISTINCT user_id)) OVER (ORDER BY DATE(occurred_at) ROWS BETWEEN 29 PRECEDING AND CURRENT ROW) AS moving_30d_average
+
+FROM tutorial.playbook_events
+GROUP BY 1
+
+
+
+-- Given the playbook_events table, compute the number of daily active users as follow:
+    -- New users: user who just join today
+    -- Retention users (continuous active users): users who are active today + previous day
+    -- Return users: Users who are not active every day, but come back a couple of days later
+    
+-- Compute number of users by different user_types
+WITH daily_activity AS (
+  -- 1. Get unique users by date
+  SELECT
+          DATE(occurred_at) as date
+        , user_id
+  
+  FROM tutorial.playbook_events
+  GROUP BY 1,2
+  
+), time_diff AS (
+  -- 2. Calculate the time difference for each user
+  SELECT
+          user_id
+        , date
+        -- Get the previous date for each user_id
+        , LAG(date, 1) OVER (PARTITION BY user_id ORDER BY date) AS previous_date
+        -- time_diff = current date - previous date
+        , (date - LAG(date, 1) OVER (PARTITION BY user_id ORDER BY date)) AS time_diff
+
+FROM daily_activity
+
+), user_category AS (
+  -- 3. Categorize the user based on time_diff
+  SELECT
+          user_id
+        , date
+        , previous_date
+        , CASE
+              WHEN time_diff=1 THEN 'retention'
+              WHEN time_diff>1 THEN 'return'
+              WHEN time_diff IS NULL THEN 'new'
+          END AS user_type
+  
+  FROM time_diff
+  )
+
+-- 4. Aggregate number of users based on the user_type by date
+SELECT
+        date
+      , user_type
+      , COUNT(user_id) AS num_users
+
+FROM user_category
+GROUP BY 1,2
+ORDER BY 1
+
+
+
+-- Calculate the number of new users, number of retention users, and the retention rate by a weekly cohort.
+
+WITH daily_activity AS (
+  -- 1. Get unique users by date
+  SELECT
+          DATE(occurred_at) as date
+        , user_id
+
+  FROM tutorial.playbook_events
+  GROUP BY 1,2
+  
+), cohorts AS (
+  -- 2. Group user by weekly cohort
+  SELECT
+          user_id
+        -- First date of user_id
+        , MIN(DATE_TRUNC('week', date)) OVER (PARTITION BY user_id) as sign_up_date
+        -- Weeks difference between sign_up_date and current_date of user_id
+        , (date - MIN(date) OVER (PARTITION BY user_id))/7 AS week
+
+  FROM daily_activity
+  
+), retention_users AS (
+  -- 3. Count number of retention users in each cohort
+  SELECT
+          sign_up_date
+        , week
+        , COUNT(DISTINCT user_id) as num_users
+
+  FROM cohorts
+  GROUP BY 1,2
+)
+
+-- 4. Get new users, and calculate retention rate
+SELECT
+        sign_up_date
+      , week
+      , num_users AS retention_users
+      -- The first value (week = 0) is the number of new users
+      , FIRST_VALUE(num_users) OVER (PARTITION BY sign_up_date ORDER BY week) AS new_users
+      -- retention rate = new users / retain users, we need convert this number from INTEGER to FLOAT 
+      , num_users / FIRST_VALUE(num_users) OVER (PARTITION BY sign_up_date ORDER BY week)::FLOAT AS retention_rate
+
+FROM retention_users
+ORDER BY 1,2
