@@ -1,7 +1,8 @@
 # This analysis used sample crunchbase datasets found on the Mode platform. SQL skills demonstrated focus on CTEs.
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
--- Write a query that shows the number of companies being invested in, number of acquiring companies in the US, their average and total investment, and acquisition amount by year. 
+-- Show the number of companies being invested in, number of acquiring companies in the US, their average and total investment, and acquisition amount by year. 
 
 WITH investments AS (
   SELECT
@@ -39,9 +40,9 @@ LEFT JOIN acquisitions acq
 ON inv.funded_year = acq.acquired_year
 ORDER BY 1
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
--- Write a query that shows the number of investors and acquirers in regions: 'SF Bay', and 'New York', their total investment, and acquisition amount by year, region and category_code.
+-- Show the number of investors and acquirers in regions: 'SF Bay', and 'New York', their total investment, and acquisition amount by year, region and category_code.
 
 WITH investments AS (
   SELECT
@@ -86,9 +87,9 @@ WHERE 1=1
           AND inv.category_code = acq.category_code
 ORDER BY 1
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
--- Write a query to compute the cumulative sum of investment amount that Google has spent over the years.
+-- Compute the cumulative sum of investment amount that Google has spent over the years.
 
 WITH investments AS (
   SELECT
