@@ -28,6 +28,8 @@ VALUES
     (15, 'Cozy Throw Blanket', 'Furnishings', 24.99, 100, 4.2);
 
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 # Evualuate all items at superstore and how they compare to the min, max, and average price.
 SELECT
       item_id 
@@ -48,6 +50,7 @@ GROUP BY item_id, item_name, category, price, stock_quantity, average_rating
 ORDER BY price DESC
 ;
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Evaluate all Kitchen Supplies items at superstore and how they compare to the min, max, and average price within the Kitchen Supplies category.
 SELECT
@@ -71,6 +74,7 @@ GROUP BY item_id, item_name, category, price, stock_quantity, average_rating
 ORDER BY price DESC
 ;
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # How many air purifiers are in stock?
 SELECT
