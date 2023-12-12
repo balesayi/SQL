@@ -1,5 +1,6 @@
 # This dataset is called chinook, which represents a digital media store and includes tables for artists, albums, media tracks, invoices, and customers. There were 11 tables in total in the dataset.
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Show Customers (their full names, customer ID, and country) who are not in the US. 
 
@@ -12,7 +13,7 @@ SELECT
 FROM chinook.customers
 WHERE country <> 'USA';
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Show only the Customers from Brazil.
         
@@ -25,7 +26,7 @@ SELECT
 FROM chinook.customers
 WHERE country = 'Brazil';
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country.
 
@@ -41,7 +42,7 @@ LEFT JOIN chinook.customers cust
 ON inv.customerid = cust.customerid
 WHERE inv.billingcountry = 'Brazil';
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Show the Employees who are Sales Support Agents.
 
@@ -52,14 +53,14 @@ SELECT
 FROM chinook.employees
 WHERE title = 'Sales Support Agent'
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Find a unique/distinct list of billing countries from the Invoice table.
 
 SELECT DISTINCT billingcountry
 FROM chinook.invoices;
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Provide a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name.
 
@@ -72,7 +73,7 @@ FROM chinook.employees emp
 JOIN chinook.customers cust ON cust.supportrepid = emp.employeeid
 JOIN chinook.invoices inv ON inv.customerid = cust.customerid
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.
 
@@ -89,7 +90,7 @@ FROM chinook.customers cust
 JOIN chinook.invoices inv ON inv.customerid = cust.customerid
 JOIN chinook.employees emp ON emp.employeeid = cust.supportrepid
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- How many Invoices were there in 2009?
 
@@ -97,7 +98,7 @@ SELECT COUNT(invoiceid)
 FROM chinook.invoices
 WHERE invoicedate BETWEEN '2009-01-01' AND '2009-12-31';
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- What are the total sales for 2009?
 
@@ -105,7 +106,7 @@ SELECT sum(total) as total_sales
 FROM chinook.invoices
 WHERE invoicedate BETWEEN '2009-01-01' AND '2009-12-31';
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Write a query that includes the purchased track name with each invoice line ID.
 
@@ -117,7 +118,7 @@ FROM chinook.tracks trk
 JOIN chinook.invoice_items invi
 ON invi.trackid = trk.trackid;
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Write a query that includes the purchased track name AND artist name with each invoice line ID.
 
@@ -137,7 +138,7 @@ ON alb.albumid = trk.albumid
 LEFT JOIN chinook.artists art 
 ON art.artistid = alb.artistid
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.
 
@@ -158,7 +159,7 @@ ON trk.mediatypeid = mt.mediatypeid
 JOIN chinook.genres gen 
 ON trk.genreid = gen.genreid;
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Show the total sales made by each sales agent.
 
@@ -178,7 +179,7 @@ ON emp.employeeid = cust.supportrepid
 WHERE emp.title = 'Sales Support Agent'
 GROUP BY emp.firstname, emp.lastname;
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Which sales agent made the most dollars in sales in 2009?
 
