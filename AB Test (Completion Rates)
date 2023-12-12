@@ -51,3 +51,41 @@ SELECT
 
 FROM funnel_CTE
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# We have a browse table that shows browse date of the website by user_id and assigns a 1 or 0 for users that have made it to the checkout page and successfully made a purchase.
+# The assignment of the 1 or 0 depending on checkout or purchase activity comes from the checkut and purchase tables that include the date, user_id, and item_id.
+# Let's determine what percent of users make it to the checkout page and of those users that make it to checkout, how many of them successfully make a purchase?
+
+WITH funnels AS (
+  -- Summarize if users make it to checkout and make a purchase  
+  SELECT 
+          DISTINCT b.browse_date
+        , b.user_id
+        , c.user_id IS NOT NULL AS 'is_checkout'
+        , p.user_id IS NOT NULL AS 'is_purchase'
+  FROM browse AS 'b'
+
+  -- The browse table has over 2300 records while the other tables have less than 600 records, let's use a LEFT JOIN to not miss any potential records from the more comprehensive browse table 
+  LEFT JOIN checkout AS 'c'
+    ON c.user_id = b.user_id
+  LEFT JOIN purchase AS 'p'
+    ON p.user_id = c.user_id
+)
+
+SELECT 
+        count(*) as num_browse
+      , SUM(is_checkout) as num_checkout
+      , SUM(is_purchase) as num_purchase
+        -- number of users that made it to check out divided by total users that browsed
+      , ROUND((100.0 * SUM(is_checkout) / COUNT(user_id)),2) || '%' as checkout_rate
+        -- number of users that made a purchase divided by users that made it to checkout
+      , ROUND((100.0 * SUM(is_purchase) / SUM(is_checkout)),2) || '%' as purchase_rate 
+      
+FROM funnels;
+
+
+
+
+
+
