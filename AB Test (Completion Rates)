@@ -34,7 +34,8 @@ WITH funnel_CTE AS (
         , COUNT(DISTINCT CASE
                               WHEN ab_group = 'control' THEN user_id
                           END) AS 'control_clicks'
-        , COUNT(DISTINCT CASE WHEN ab_group = 'variant' THEN user_id
+        , COUNT(DISTINCT CASE 
+                              WHEN ab_group = 'variant' THEN user_id
                           END) AS 'variant_clicks'
   FROM onboarding_modals
   GROUP BY 1
