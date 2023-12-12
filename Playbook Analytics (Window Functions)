@@ -1,5 +1,6 @@
 # This analysis used sample Playbook Events datasets found on the Mode platform. SQL skills demonstrated focus on Window Functions.
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Calculate a running total (cumulative sum) of active users by date and get the number of users, and running total of users by date. 
 
@@ -11,7 +12,7 @@ SELECT
 FROM tutorial.playbook_events
 GROUP BY DATE(occurred_at)
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Calculate Month-Over-Month Active User Growth Rate.
 
@@ -34,7 +35,7 @@ SELECT
 FROM users
 ORDER BY 1
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Calculate a 30-day moving average of active users by date.
 
@@ -47,7 +48,7 @@ SELECT
 FROM tutorial.playbook_events
 GROUP BY 1
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Given the playbook_events table, compute the number of daily active users as follow:
     -- New users: user who just join today
@@ -101,7 +102,7 @@ FROM user_category
 GROUP BY 1,2
 ORDER BY 1
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Calculate the number of new users, number of retention users, and the retention rate by a weekly cohort.
 
