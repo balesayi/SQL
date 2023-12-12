@@ -57,7 +57,7 @@ FROM funnel_CTE
 # The assignment of the 1 or 0 depending on checkout or purchase activity comes from the checkut and purchase tables that include the date, user_id, and item_id.
 # Let's determine what percent of users make it to the checkout page and of those users that make it to checkout, how many of them successfully make a purchase?
 
-WITH funnels AS (
+WITH funnels_CTE AS (
   -- Summarize if users make it to checkout and make a purchase  
   SELECT 
           DISTINCT b.browse_date
@@ -82,7 +82,7 @@ SELECT
         -- number of users that made a purchase divided by users that made it to checkout
       , ROUND((100.0 * SUM(is_purchase) / SUM(is_checkout)),2) || '%' as purchase_rate 
       
-FROM funnels;
+FROM funnels_CTE;
 
 
 
