@@ -1,4 +1,4 @@
-# x
+# This analysis used sample Playbook Events datasets found on the Mode platform. SQL skills demonstrated focus on Window Functions.
 
 
 -- Calculate a running total (cumulative sum) of active users by date and get the number of users, and running total of users by date. 
