@@ -1,0 +1,53 @@
+# Compare Funnels For A/B Tests
+
+# Mattresses and More has an onboarding workflow for new users of their website. It uses modal pop-ups to welcome users and show them important features of the site like:
+
+    1. Welcome to Mattresses and More!
+    2. Browse our bedding selection
+    3. Select items to add to your cart
+    4. View your cart by clicking on the icon
+    5. Press ‘Buy Now!’ when you’re ready to checkout
+
+# The Product team at Mattresses and More has created a new design for the pop-ups that they believe will lead more users to complete the workflow.
+
+# They’ve set up an A/B test where:
+
+    - 50% of users view the original control version of the pop-ups
+    - 50% of users view the new variant version of the pop-ups
+
+# The data table is called onboarding_modals with the following columns:
+
+    - user_id - the user identifier
+    - modal_text - the modal step
+    - user_action - the user response (Close Modal or Continue)
+    - ab_group - the version (control or variant)
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Below is my solution to the question: How is the funnel different between the two groups?
+
+WITH funnel_CTE AS (
+  -- First we summarize how many users make it to each modal_text between the two controlled groups.
+  SELECT 
+          modal_text
+        , COUNT(DISTINCT CASE
+                              WHEN ab_group = 'control' THEN user_id
+                          END) AS 'control_clicks'
+        , COUNT(DISTINCT CASE WHEN ab_group = 'variant' THEN user_id
+                          END) AS 'variant_clicks'
+  FROM onboarding_modals
+  GROUP BY 1
+  ORDER BY 1
+) 
+
+SELECT
+        modal_text
+      , control_clicks
+      , variant_clicks
+      -- We can now calculate the completion rates between the two controlled groups by dividing the user counts at each level by the total user counts
+      , (100.0 * control_clicks / FIRST_VALUE(control_clicks) OVER (ORDER BY modal_text)) || '%' as cc_completion_rate
+      , (100.0 * variant_clicks / FIRST_VALUE(variant_clicks) OVER (ORDER BY modal_text)) || '%' as vc_completion_rate
+
+FROM funnel_CTE
+
