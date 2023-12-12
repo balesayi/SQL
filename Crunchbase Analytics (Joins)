@@ -1,7 +1,8 @@
 # This analysis used sample crunchbase datasets found on the Mode platform. SQL skills demonstrated focus on Joins.
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
--- Write a query that shows a company's name, "status" (found in the crunchbase_companies table), and the number of unique investors in that company from the investments table. 
+-- Show a company's name, "status", and the number of unique investors in that company from the investments table. 
 -- Limit to only companies in the state of New York. Sort the number of investors from most to fewest. 
 
 SELECT 
@@ -18,7 +19,7 @@ WHERE companies.state_code = 'NY'
 GROUP BY 1,2
 ORDER BY 3 DESC
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- How many companies have no investors compared to those that do have investors?
 
@@ -36,7 +37,7 @@ LEFT JOIN tutorial.crunchbase_investments investments
 GROUP BY 1
 ORDER BY 2 DESC
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- What is the percentage of companies being acquired vs not being acquired with investors and without investors?
 
@@ -62,7 +63,7 @@ LEFT JOIN tutorial.crunchbase_acquisitions acq
 GROUP BY 1,2
 ORDER BY 3 DESC
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Of all the company being invested in, write a query that compares the average amount of investment raised by companies in 'San Francisco' city to companies in 'NY' city and by status.
 
@@ -82,7 +83,7 @@ WHERE comp.city IN ('San Francisco', 'NY')
 GROUP BY 1,2
 ORDER BY 4 DESC
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Of all the company being invested in, write a query that show the average amount of investment raised by companies in the US by status every year.
 
